@@ -50,8 +50,11 @@ public class FibonacciHeap
         }
         else{
             HeapNode tempFirst = this.first;
-            tempFirst.setPrev(newNode);
+            HeapNode last = this.first.getPrev();
+            newNode.setPrev(last);
             newNode.setNext(tempFirst);
+            tempFirst.setPrev(newNode);
+            last.setNext(newNode);
             this.first = newNode;
             if (newNode.getKey() < tempFirst.getKey()){
                 this.min = newNode;
@@ -106,16 +109,16 @@ public class FibonacciHeap
 
             childMin.setParent(null);
             this.totalTrees += 1;
-            if (childMin.getIsMark()){
-                childMin.setIsMark(false);
+            if (childMin.getMarked()){
+                childMin.setMarked(false);
                 this.totalMarkedNodes -= 1;
             }
             HeapNode temp = childMin.getNext();
             while (temp != childMin){
                 this.totalTrees += 1;
                 temp.setParent(null);
-                if (temp.getIsMark()){
-                    temp.setIsMark(false);
+                if (temp.getMarked()){
+                    temp.setMarked(false);
                     this.totalMarkedNodes -= 1;
                 }
                 temp = temp.getNext();
@@ -131,9 +134,8 @@ public class FibonacciHeap
         }
     }
 
-
     private void successiveLinking(){
-        HeapNode[] ranks = new HeapNode[(int) Math.floor(Math.log(this.size)/Math.log(2)) + 1];
+        HeapNode[] ranks = new HeapNode[(int) Math.floor(1.5 * (Math.log(this.size)/Math.log(2))) + 1];
         this.first.setPrev(this.first);
         this.first.setNext(this.first);
         ranks[this.first.getRank()] = this.first;
@@ -309,15 +311,15 @@ public class FibonacciHeap
     	if (this.isEmpty()){
             return new int[0];
         }
-        int[] arr = new int[(int) Math.floor(Math.log(this.size)/Math.log(2)) + 1];
-        arr[first.getRank()] += 1;
+        int[] arr = new int[(int) Math.floor(1.5 * (Math.log(this.size)/Math.log(2))) + 1];
+        arr[this.first.getRank()] += 1;
         HeapNode temp = this.first.getNext();
         while (temp != this.first){
             arr[temp.getRank()] += 1;
             temp = temp.getNext();
         }
 
-        return arr; //	 to be replaced by student code
+        return arr;
     }
 	
    /**
@@ -356,8 +358,8 @@ public class FibonacciHeap
     private void cascadingCuts(HeapNode x, HeapNode y){
         this.cut(x,y);
         if (y.getParent() != null){
-            if (!y.isMark){
-                y.isMark = true;
+            if (!y.Marked){
+                y.Marked = true;
                 this.totalMarkedNodes += 1;
             }
             else{
@@ -368,7 +370,7 @@ public class FibonacciHeap
 
     private void cut(HeapNode x, HeapNode y){
         x.setParent(null);
-        x.setIsMark(false);
+        x.setMarked(false);
         totalMarkedNodes -= 1;
         y.setRank(y.getRank() - 1);
         if (x.getNext() == x){
@@ -477,6 +479,11 @@ public class FibonacciHeap
         }
         return arr; // should be replaced by student code
     }
+
+//    Todo do deleteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+    public HeapNode getFirst(){
+        return this.first;
+    }
     
    /**
     * public class HeapNode
@@ -493,7 +500,7 @@ public class FibonacciHeap
         public HeapNode next;
         public HeapNode prev;
         public HeapNode parent;
-        public boolean isMark;
+        public boolean Marked;
         public HeapNode pointerToOrigNode;
 
         public HeapNode(int key) {
@@ -503,7 +510,7 @@ public class FibonacciHeap
             this.next = this;
             this.prev = this;
             this.parent = null;
-            this.isMark = false;
+            this.Marked = false;
             this.pointerToOrigNode = null;
     	}
 
@@ -547,11 +554,11 @@ public class FibonacciHeap
            this.rank = rank;
        }
 
-       public boolean getIsMark(){
-           return this.isMark;
+       public boolean getMarked(){
+           return this.Marked;
        }
-       public void setIsMark(boolean mark){
-           this.isMark = mark;
+       public void setMarked(boolean mark){
+           this.Marked = mark;
        }
        public HeapNode getPointerToOrigNode(){
            return this.pointerToOrigNode;
