@@ -356,7 +356,6 @@ public class FibonacciHeap
                 this.cascadingCuts(x, x.getParent());
             }
         }
-        return; // should be replaced by student code
     }
 
     private void cascadingCuts(HeapNode x, HeapNode y){
