@@ -409,7 +409,6 @@ public class TestFibonacciHeap {
 
         int numberOfTrees = assertValidHeapRoots(heap, this.uniqueValues);
         int numberOfMarked = assertValidHeapNodes(heap);
-
         assertEquals(numberOfTrees + numberOfMarked * 2, heap.potential());
     }
 
@@ -1107,7 +1106,7 @@ public class TestFibonacciHeap {
         assertEquals(3, heap.potential());
         assertEquals(0, FibonacciHeap.totalCuts() - cuts);
         assertEquals(0, FibonacciHeap.totalLinks() - links);
-        assertTrue(Arrays.equals(new int[] { 3,0,0}, heap.countersRep()));
+        assertTrue(Arrays.equals(new int[] { 3}, heap.countersRep()));
     }
 
     @Test
@@ -1179,6 +1178,7 @@ public class TestFibonacciHeap {
         assertEquals(4, heap.potential());
         assertEquals(1, FibonacciHeap.totalCuts() - cuts);
         assertEquals(3, FibonacciHeap.totalLinks() - links);
+        int[] temp = heap.countersRep();
         assertTrue(Arrays.equals(new int[] { 1, 0, 1 }, heap.countersRep()));
     }
 
